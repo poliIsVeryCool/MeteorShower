@@ -1,5 +1,5 @@
 // Project Title
-// Your Name
+// Your Name Policron willis
 // Date
 //
 // Extra for Experts:
@@ -11,6 +11,7 @@ let meteorR = 40
 let shield = 3
 let lose = false
 let start = false
+let score = 0
 
 function setup() {
   createCanvas(400, 400);
@@ -31,7 +32,10 @@ function draw() {
   if(lose == false) {
   background(0);
   fill(255)
-  text (shield, 100,390)
+  text ("Shields", 10,20)
+  text (shield, 60,20)//shield counter
+  text ("score",320,20)
+  text (score, 360,20)
   drawShip(shipX, 375);
   drawMeteor(meteorX, meteorY, meteorR);
   meteorY += 5;
@@ -50,6 +54,7 @@ function draw() {
   if(meteorY > 450) {
     meteorY = -50;
     meteorX = random(50, 350);
+    score += 100
   }
   if(dist (meteorX, meteorY, shipX, 375) <= 30)  {
     shield -= 1
@@ -66,12 +71,14 @@ if (lose == true) {
   rect(0,0, width ,height,10)
   fill(255,0,0)
   textAlign(CENTER,CENTER)
-  text("YOU LOSE",200,200)
-  text('press space to restart',200,300)
+  text("GAME OVER!!!",200,200)
+  text('press r to restart',200,300)
 }
-if(keyIsDown(32)&&lose == true){
+if(keyIsDown(82)&&lose == true){
   lose = !lose
   shield = 3 
+  score = 0
+  shipX = 200
 }
 }
 
