@@ -84,8 +84,10 @@ if(keyIsDown(82)&&lose == true){
 
 function drawShip(x, y,) {
   //Draw the ship at the given x and y coordinates
-  fill(255);
+  fill(230);
   triangle(x - 20, y + 20, x + 20, y + 20, x, y - 20);
+  fill('lightblue')
+  triangle(x, y-10,x-10,y+10,x+10,y+10)
 }
 
 function drawMeteor(x, y, r) {
