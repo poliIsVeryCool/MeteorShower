@@ -1,9 +1,10 @@
 // Project Title
-// Your Name Policron && Willis
+// Your Name Policron Aggabao && Willis Manzano
 // Date
 
 let shipX = 200;   // Variables
 let shield = 3
+let shieldTime = 0
 
 let meteorX1 = 200;
 let meteorY1 = -50;
@@ -52,8 +53,35 @@ function draw() {
       start = !start
   }
   }
+  if(start == true && tutorial == false) {    // Tutorial
+    background(0)
+    textSize(32)
+    fill(255)
+    text("Tutorial", 200, 50)
+    drawShip(130,200)
+    drawMeteor(80,200,40)
+    drawMeteor(290,170,40)
+    drawShip(290, 200)
+    drawShield(350,160)
+    stroke(255)
+    line (330,170,340,170)
+    noStroke()
+    fill(255, 255, 0, 127)
+    stroke("yellow")
+    circle(290, 205, 50)
+    noStroke()
+    textSize(12)
+    fill(255)
+    text("Dodge Meteors to Earn Points", 100, 250)
+    text("Shields Protect You For 3 Seconds", 290, 250)
+    text("Run Out Of Shields And You'll Die Next Time You Get Hit", 200, 300)
+    text ('Press "E" to Start', 200, 380)
+    if(keyIsDown(69)) {
+    tutorial = !tutorial
+    }
+  }
 
-  if(win == false && lose == false && start == true) {     // Run after start screen and tutorial and on restart
+  if(win == false && lose == false && start == true && tutorial == true) {     // Run after start screen and tutorial and on restart
   background(0);
   fill(255)
 
@@ -80,9 +108,8 @@ function draw() {
   }
   if(dist (meteorX1, meteorY1, shipX, 350) <= meteorR1 / 2 + 10 && meteorHit == false)  {    // Meteor Hit
     shield -= 1
-    meteorY1 = -100;
-    meteorX1 = random(20,380)
     meteorHit = !meteorHit
+    shieldTime = frameCount
   }
 
   if(meteorY2 > 500) {   // Meteor Hit & Miss #2
@@ -92,9 +119,8 @@ function draw() {
   }
   if(dist (meteorX2, meteorY2, shipX, 350) <= meteorR2 / 2 + 10 && meteorHit == false)  {    // Meteor Hit
     shield -= 1
-    meteorY2 = -200;
-    meteorX2 = random(50,350)
     meteorHit = !meteorHit
+    shieldTime = frameCount
   }
 
   if(meteorY3 > 450) {   // Meteor Hit & Miss #3
@@ -104,9 +130,8 @@ function draw() {
   }
   if(dist (meteorX3, meteorY3, shipX, 350) <= meteorR3 / 2 + 10 && meteorHit == false)  {   // Meteor Hit
     shield -= 1
-    meteorY3 = -50;
-    meteorX3 = random(50,350)
-    meteorHit = !meteorHit
+    meteorHit = false
+    shieldTime = frameCount
   }
 
   drawShip(shipX, 350);   // Draw the Ship
@@ -116,7 +141,9 @@ function draw() {
     stroke("yellow")
     circle(shipX, 355, 50)
     noStroke()
-    meteorHit = false
+    if(frameCount == shieldTime + 180) {
+      meteorHit = false
+    }
   }
 
   if (keyIsDown(65)||keyIsDown(LEFT_ARROW)) {   // Ship movement
@@ -195,14 +222,17 @@ if(keyIsDown(82)){   // Restart the game
   shield = 3 
   points = 0
   shipX = 200
+  meteorHit == false
   }
   if (win == true) {
     win = !win
     shield = 3
     points = 0
     shipX = 200
+    meteorHit = false
   }
 }
+
 }
 
 // Define the functions
