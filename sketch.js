@@ -4,17 +4,23 @@
 
 let shipX = 200;   // Variables
 let shield = 3
+
 let meteorX1 = 200;
 let meteorY1 = -50;
 let meteorR1 = 40
+
 let meteorX2 = 200;
 let meteorY2 = -50;
 let meteorR2 = 100
+
 let meteorX3 = 300;
 let meteorY3 = -50;
 let meteorR3 = 30
+
 let meteorHit = false
+
 let start = false
+let tutorial = false
 let win = false
 let lose = false
 let points = 0
@@ -33,22 +39,21 @@ function setup() {  // Runs Once Before Everything
 function draw() {
   background(0);
   fill(255)
-
   if (start == false) {   //Start Screen
     textSize(32)
-    text ('Game Name Or Something', 200, 100)
+    text ('Game Name Or Something', 200, 50)
     textSize(12)
-    text ('Press "Q" to Begin', 200, 200)
-    drawShip(100,350)
-    drawMeteor(90, 250, 40)
-    drawMeteor(150, 290, 40)
-    drawMeteor(70, 300, 30)
+    text ('Press "Q" to Begin', 200, 380)
+    drawShip(200,300)
+    drawMeteor(200, 150, 50)
+    drawMeteor(150, 200, 40)
+    drawMeteor(250, 220, 30)
     if (keyIsDown(81)) {
       start = !start
   }
   }
-  
-  if(win == false && lose == false && start == true) {     // Run in you haven't lost yet
+
+  if(win == false && lose == false && start == true) {     // Run after start screen and tutorial and on restart
   background(0);
   fill(255)
 
@@ -60,7 +65,7 @@ function draw() {
     drawMeteor(meteorX3,meteorY3,meteorR3)    // Draw third Smaller meteor after you reach 3000 points
   }
 
-  meteorY1 += 7   //Move the meteor(s)
+  meteorY1 += 7   //Move the meteor(s)   
   if (points >= 1000) { // Move bigger meteor when you hit 1000 points
       meteorY2 += 5
   }
@@ -68,41 +73,51 @@ function draw() {
     meteorY3 += 9
   }
 
-  if(meteorY1 > 450) {   // Meteor Hit & Respawn #1
-    meteorY1 = -100;
+  if(meteorY1 > 450) {   // Meteor Hit & Miss #1
+    meteorY1 = -100;                //Meteor Miss
     meteorX1 = random(20,380);
     points += 100
   }
-  if(dist (meteorX1, meteorY1, shipX, 350) <= meteorR1 / 2 + 10)  {
+  if(dist (meteorX1, meteorY1, shipX, 350) <= meteorR1 / 2 + 10 && meteorHit == false)  {    // Meteor Hit
     shield -= 1
     meteorY1 = -100;
     meteorX1 = random(20,380)
+    meteorHit = !meteorHit
   }
 
-  if(meteorY2 > 500) {   // Meteor Hit & Respawn #2
-    meteorY2 = -200;
+  if(meteorY2 > 500) {   // Meteor Hit & Miss #2
+    meteorY2 = -200;                //Meteor Miss
     meteorX2 = random(50,350);
     points += 100
   }
-  if(dist (meteorX2, meteorY2, shipX, 350) <= meteorR2 / 2 + 10)  {
+  if(dist (meteorX2, meteorY2, shipX, 350) <= meteorR2 / 2 + 10 && meteorHit == false)  {    // Meteor Hit
     shield -= 1
     meteorY2 = -200;
     meteorX2 = random(50,350)
+    meteorHit = !meteorHit
   }
 
-  if(meteorY3 > 450) {   // Meteor Hit & Respawn #3
-    meteorY3 = -50;
+  if(meteorY3 > 450) {   // Meteor Hit & Miss #3
+    meteorY3 = -50;                //Meteor Miss
     meteorX3 = random(50,350);
     points += 100
   }
-  if(dist (meteorX3, meteorY3, shipX, 350) <= meteorR3 / 2 + 10)  {
+  if(dist (meteorX3, meteorY3, shipX, 350) <= meteorR3 / 2 + 10 && meteorHit == false)  {   // Meteor Hit
     shield -= 1
     meteorY3 = -50;
     meteorX3 = random(50,350)
+    meteorHit = !meteorHit
   }
 
-
   drawShip(shipX, 350);   // Draw the Ship
+
+  if (meteorHit == true && shield >= 0) {  //shield ship
+    fill(255, 255, 0, 127)
+    stroke("yellow")
+    circle(shipX, 355, 50)
+    noStroke()
+    meteorHit = false
+  }
 
   if (keyIsDown(65)||keyIsDown(LEFT_ARROW)) {   // Ship movement
     shipX -= 5;
@@ -118,21 +133,35 @@ function draw() {
     shipX = 380;
   }
 
-  textSize(12)
-  text ("Shields", 30,20)
-  text (shield, 60,20)    // Shield counter
-
-  
-  text ("Points",320,20)  
-  text (points, 360,20)    // Point counter
-
-  if (points >= 10000) {
+  if (points >= 10000) {   // Win when hit 10000 points or more
     win = !win
   }
 
   if (shield < 0) {       // Lose game if you get hit without shields
   lose = !lose
   shield = 0
+  }
+
+  fill(0) // Bar display with shield count and point count
+  stroke(255)
+  rect(200, 0, 401, 100, 15)
+  noStroke()
+  fill(255)
+  textSize(20)
+  text("Points", 40, 25)
+  noStroke()
+  fill("yellow")
+  text(points, 100, 25)
+  fill("white")
+  text("Shields", 350, 25)
+  if(shield >= 3) {
+  drawShield(250, 15)
+  }
+  if(shield >= 2) {
+  drawShield(275, 15)
+  }
+  if(shield >= 1) {
+  drawShield(300, 15)
   }
 }
 
@@ -181,8 +210,10 @@ if(keyIsDown(82)){   // Restart the game
 function drawShip(x, y) {
   fill(230);
   triangle(x - 20, y + 20, x + 20, y + 20, x, y - 20);
-  fill(100, 100, 255)
+  fill("yellow")
+  stroke(0)
   triangle(x, y-10,x-10,y+10,x+10,y+10)
+  noStroke()
 }
 
 function drawMeteor(x, y, r) {
@@ -201,9 +232,6 @@ function drawMeteor(x, y, r) {
 }
 
 function drawShield(x,y) {
-  stroke(255)
   fill("yellow")
   triangle(x - 10, y, x + 10, y, x, y + 20)
 }
-
-points = 9000
