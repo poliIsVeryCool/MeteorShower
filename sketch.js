@@ -223,6 +223,9 @@ if(keyIsDown(82)){   // Restart the game
   points = 0
   shipX = 200
   meteorHit == false
+  meteorY1 = -50
+  meteorY2 = -50
+  meteorY3 = -50
   }
   if (win == true) {
     win = !win
@@ -230,6 +233,9 @@ if(keyIsDown(82)){   // Restart the game
     points = 0
     shipX = 200
     meteorHit = false
+    meteorY1 = -50
+    meteorY2 = -50
+    meteorY3 = -50
   }
 }
 
